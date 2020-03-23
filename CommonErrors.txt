@@ -1,0 +1,22 @@
+Common errors:
+
+Not likely a datetime?
+errors='coerce' argument in pd.Period() or pd.to_date...
+If you are using month as a slice when you get this error, make sure that your input is a list. 
+
+('len',) when running Impact pivot?
+Your pivot table is empty, usually because a slice is not being called correctly
+
+unsupported operation between str and int?
+Either delete strings in data, or convert numerics to strings
+
+KeyError: column?
+Can't find column in data, it may have been removed in an earlier step
+
+ValueError:Cannot set a frame with no defined index and a value that cannot be converted to a Series?
+Happened when I thought I was working with App data but then it turned out to be Suite data.
+Means a previous filter didn't have the intended effect. 
+ 
+
+
+
