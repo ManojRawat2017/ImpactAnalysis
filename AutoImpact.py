@@ -12,13 +12,11 @@ import pyexcel as p
 #import Impact&VerbatimFunctions
 import AdminImpact, EndUserImpact
 
-#Script by Jared Anderson
-
 print(sys.argv)
 program_name = sys.argv[0]
-report_type = sys.argv[1]
-data_file = sys.argv[2]
-time_period = sys.argv[3]
+report_type = sys.argv[1] # 'Admin' or 'EndUser'
+data_file = sys.argv[2] 
+time_period = sys.argv[3] 
 period_1 = sys.argv[4]
 period_2 = sys.argv[5]
 
@@ -81,7 +79,7 @@ if report_type == 'EndUser':
     reportEU = Impact("EndUser",time_period,[period_1],[period_2])
     stamp = reportEU.get_timestamp()
     print(stamp)
-    reportEU.EndUser(data_file,fork_file,s_o_a)
+    reportEU.EndUser(data_file,fork_file,survey=s_o_a)
 
     d = '('+str(datetime.datetime.today().month)+'-'+str(datetime.datetime.today().day)+'-'+str(datetime.datetime.today().year)+')'
     num_check = set('0123456789.')

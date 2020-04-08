@@ -8,8 +8,6 @@ import xlwt
 import glob
 import pyexcel as p
 
-#Script by Jared Anderson
-
 def transform_rating(rating):
     '''Input: Column of Data with NPS Field (on a scale of 1 to 5...)
     Output: Column with either Promoter/Detractor/Passive label, or the corresponding weights, based on datatype'''
@@ -335,6 +333,33 @@ def custom_impact_pivot_allup(df, time_interval,previous,current):
     table_0.rename({'ratingvalue': 'AllUp'}, axis='index',inplace=True)
     table_1 = make_pivot_table_new(df,'Custom_Period',previous,current,value='ratingvalue',dim='UserType')
     
+    slices = common_list.copy()
+    #print(signals)
+
+    data = df[(df.SurveyType=='Suite')]
+    #print(data.pivot_table(columns=['Custom_Period'],values='ratingvalue'))
+    table_2 = make_pivot_table_new(data,'Custom_Period',previous,current,value='ratingvalue')
+    table_2.rename({'ratingvalue': 'AllUp'}, axis='index',inplace=True)
+    df_empty = pd.DataFrame({' ' : []})
+    table_0.to_csv('SuiteAllUpAllUp'+stamp+'.csv',)
+    table_1.to_csv('SuiteAllUpAllUp'+stamp+'.csv',header=False,mode='a')
+    table_2.to_csv('SuiteAllUpAllUp'+stamp+'.csv',header=False,mode='a')
+    df_empty.to_csv('SuiteAllUpAllUp'+stamp+'.csv',mode='a')
+    #print(edition, slices)
+    for var in slices:
+        table = make_pivot_table_new(data,'Custom_Period',previous,current,dim=var,value='ratingvalue')
+        if var == 'DeviceManufacturer':
+            table = table.query('DeviceManufacturer != ["To Be Filled By O.E.M."]')
+        elif var == 'Resolution':
+            table = table.query('Resolution != ["nanxnan"]')
+        if var in ['A13Region', 'DeviceManufacturer']:
+            table = table.sort_values(by=[('Impact','TotalImpact')])
+        elif var in ["Tenant_Tenure_UHICommercial","SeatSizeBuckets_UHICommercial"]:
+            table = table.sort_index()
+        pd.DataFrame(data=[var]).to_csv('SuiteAllUpAllUp'+stamp+'.csv',mode='a',header=False,index=False)
+        table.to_csv('SuiteAllUpAllUp'+stamp+'.csv',header=False,mode='a')
+        df_empty.to_csv('SuiteAllUpAllUp'+stamp+'.csv',mode='a')
+
     editions = df.UserType.dropna().unique()
     for edition in editions:
         slices = common_list.copy()
